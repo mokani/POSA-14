@@ -97,7 +97,7 @@ public class PingPongRight {
         }
 
         /**
-         * Hook method for ping/pong acquire.
+         * Method for acquiring the appropriate SimpleSemaphore.
          */
         void acquire() {
         	// TODO fill in here
@@ -105,7 +105,7 @@ public class PingPongRight {
         }
 
         /**
-         * Hook method for ping/pong release.
+         * Method for releasing the appropriate SimpleSemaphore.
          */
         void release() {
         	// TODO fill in here
