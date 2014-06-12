@@ -2,6 +2,7 @@ package edu.vuum.mocca;
 
 // Import the necessary Java synchronization and scheduling classes.
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 /**
  * @class PingPongRight
@@ -50,13 +51,16 @@ public class PingPongRight {
          * iteration.
          */
         // TODO - You fill in here.
+        private final String mStringToPrint;
 
         /**
          * Two SimpleSemaphores use to alternate pings and pongs.  You
          * can use an array of SimpleSemaphores or just define them as
          * two data members.
-         */
+         */        
         // TODO - You fill in here.
+        SimpleSemaphore mFirstSemaphore;
+        SimpleSemaphore mSecondSemaphore;
 
         /**
          * Constructor initializes the data member(s).
@@ -65,7 +69,11 @@ public class PingPongRight {
                                   SimpleSemaphore semaphoreOne,
                                   SimpleSemaphore semaphoreTwo,
                                   int maxIterations) {
-            // TODO - You fill in here.
+        	// TODO - You fill in here.
+        	mStringToPrint = stringToPrint;
+        	mMaxLoopIterations = maxIterations;
+        	mFirstSemaphore = semaphoreOne;
+        	mSecondSemaphore = semaphoreTwo;
         }
 
         /**
@@ -78,22 +86,30 @@ public class PingPongRight {
              * This method runs in a separate thread of control and
              * implements the core ping/pong algorithm.
              */
+        	// TODO - You fill in here.
+        	for (int i = 1; i <= mMaxIterations; ++i) {
+        		acquire();
+        		System.out.println(mStringToPrint + "(" + i + ")");
+        		release();
+        	}
 
-            // TODO - You fill in here.
+        	mLatch.countDown();
         }
 
         /**
          * Hook method for ping/pong acquire.
          */
         void acquire() {
-            // TODO fill in here
+        	// TODO fill in here
+        	mFirstSemaphore.acquireUninterruptibly();
         }
 
         /**
          * Hook method for ping/pong release.
          */
         void release() {
-            // TODO fill in here
+        	// TODO fill in here
+        	mSecondSemaphore.release();
         }
     }
 
@@ -108,15 +124,15 @@ public class PingPongRight {
 
         // TODO initialize this by replacing null with the appropriate
         // constructor call.
-        mLatch = null;
+        mLatch = new CountDownLatch(2);
 
         // Create the ping and pong SimpleSemaphores that control
         // alternation between threads.
 
         // TODO - You fill in here, make pingSema start out unlocked.
-        SimpleSemaphore pingSema = null;
+        SimpleSemaphore pingSema = new SimpleSemaphore(1, true);
         // TODO - You fill in here, make pongSema start out locked.
-        SimpleSemaphore pongSema = null;
+        SimpleSemaphore pongSema = new SimpleSemaphore(0, true);
 
         System.out.println(startString);
 
@@ -125,19 +141,23 @@ public class PingPongRight {
         PlayPingPongThread ping = new PlayPingPongThread(/*
                                                           * TODO - You fill in
                                                           * here
-                                                          */);
+                                                          */
+        		pingString, pingSema, pongSema, maxIterations);
         PlayPingPongThread pong = new PlayPingPongThread(/*
                                                           * TODO - You fill in
                                                           * here
-                                                          */);
+                                                          */
+        		pongString, pongSema, pingSema, maxIterations);
 
         // TODO - Initiate the ping and pong threads, which will call
         // the run() hook method.
+        ping.start();
+        pong.start();      
 
         // TODO - replace the following line with a barrier
         // synchronizer call to mLatch that waits for both threads to
         // finish.
-        throw new java.lang.InterruptedException();
+        mLatch.await();
 
         System.out.println(finishString);
     }
