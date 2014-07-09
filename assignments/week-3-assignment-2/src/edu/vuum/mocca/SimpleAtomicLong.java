@@ -113,4 +113,3 @@ class SimpleAtomicLong
         return value;
     }
 }
-

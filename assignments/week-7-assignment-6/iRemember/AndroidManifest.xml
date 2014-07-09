@@ -30,7 +30,9 @@
             android:name="edu.vuum.mocca.ui.ListStoryActivity"
             android:label="@string/title_activity_main" />
         
-        <activity android:name="edu.vuum.mocca.ui.LoginActivity">
+        <!-- ONLY THOSE APPLICATION WHICH HAVE FINE LOCATION ACCESS CAN START THIS ACTIVITY. -->
+        <activity android:name="edu.vuum.mocca.ui.LoginActivity"
+                  android:permission="android.permission.ACCESS_FINE_LOCATION">
              <intent-filter>
                 <action android:name="android.intent.action.MAIN" /> <!-- Line 35 -->
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -52,7 +54,8 @@
         <!-- THIS IS THE SOUND RECORD ACTIVITY -->
         <activity
             android:name="edu.vuum.mocca.ui.SoundRecordActivity"
-            android:label="@string/title_activity_sound_record">
+            android:label="@string/title_activity_sound_record"
+            android:exported="false">  <!-- NO OTHER ACTIVITY CAN ACCESS THIS. -->
             <intent-filter> 										<!-- Line 56 -->
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
